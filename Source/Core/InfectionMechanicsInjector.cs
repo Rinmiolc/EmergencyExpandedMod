@@ -71,6 +71,20 @@ namespace EmergencyExpanded
             {
                 if (def.race != null && def.race.IsFlesh)
                 {
+                    // 为所有血肉生物注入清创术和冲洗术，提供对异种族 (HAR) 和动物的防御性兼容
+                    if (def.recipes == null)
+                    {
+                        def.recipes = new List<RecipeDef>();
+                    }
+                    if (EE_DefOf.EE_Recipe_Debridement != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_Debridement))
+                    {
+                        def.recipes.Add(EE_DefOf.EE_Recipe_Debridement);
+                    }
+                    if (EE_DefOf.EE_Recipe_Irrigation != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_Irrigation))
+                    {
+                        def.recipes.Add(EE_DefOf.EE_Recipe_Irrigation);
+                    }
+
                     // 1. 处理 inspectorTabs 类型列表
                     if (def.inspectorTabs == null)
                     {

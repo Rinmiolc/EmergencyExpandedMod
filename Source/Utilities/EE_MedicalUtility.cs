@@ -102,7 +102,8 @@ namespace EmergencyExpanded
                 }
                 else if (EE_DefOf.EE_Necrosis != null && hediff.def == EE_DefOf.EE_Necrosis)
                 {
-                    traumaLoad += hediff.Severity * 10f;
+                    float factor = (hediff.Part != null && Hediff_Necrosis.IsVitalCorePart(hediff.Part)) ? EE_Constants.NecrosisVitalOrganSirsLoad : 10f;
+                    traumaLoad += hediff.Severity * factor;
                 }
             }
             return traumaLoad;

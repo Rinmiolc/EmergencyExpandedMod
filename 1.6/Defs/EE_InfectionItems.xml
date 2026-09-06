@@ -47,6 +47,7 @@
       <li>Medicine</li>
     </thingCategories>
     <ingestible>
+      <drugCategory>Medical</drugCategory>
       <preferability>NeverForNutrition</preferability>
       <foodType>Processed</foodType>
       <baseIngestTicks>120</baseIngestTicks>
@@ -62,6 +63,12 @@
         </li>
       </outcomeDoers>
     </ingestible>
+    <comps>
+      <li Class="CompProperties_Drug">
+        <listOrder>1025</listOrder>
+        <teetotalerCanConsume>true</teetotalerCanConsume>
+      </li>
+    </comps>
   </ThingDef>
 
   <RecipeDef>

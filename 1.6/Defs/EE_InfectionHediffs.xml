@@ -6,6 +6,7 @@
     <defName>EE_Necrosis</defName>
     <label>Necrosis</label>
     <description>Death of wound tissue due to severe infection or ischemia. Necrotic tissue loses function and releases toxins. Must be surgically removed via debridement, otherwise the limb will decay and threaten life.</description>
+    <hediffClass>EmergencyExpanded.Hediff_Necrosis</hediffClass>
     <tendable>false</tendable>
     <maxSeverity>1.0</maxSeverity>
     <comps>
@@ -30,7 +31,6 @@
         <minSeverity>0.8</minSeverity>
         <partEfficiencyOffset>-1.0</partEfficiencyOffset>
         <painOffset>0.8</painOffset>
-        <destroyPart>true</destroyPart>
       </li>
     </stages>
   </HediffDef>
@@ -76,7 +76,6 @@
         <capMods>
           <li><capacity>Consciousness</capacity><setMax>0.3</setMax></li>
           <li><capacity>BloodFiltration</capacity><offset>-0.6</offset></li>
-          <li><capacity>BloodPumping</capacity><offset>-0.3</offset></li>
         </capMods>
       </li>
     </stages>

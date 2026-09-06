@@ -364,6 +364,10 @@ namespace EmergencyExpanded
         public const float DebridementDamageSkillReduction = 1.0f;
         // 顶级医生清创时的最小保底伤害
         public const float DebridementDamageMin = 1f;
+        // 清创手术对局部感染 (WoundInfection) 严重度的削减比例 (50%)
+        public const float DebridementInfectionSeverityReduction = 0.50f;
+        // 清创手术单次最大伤害占该部位剩余健康值的比例上限 (防止对手指/耳朵等小器官清创时发生意外切断)
+        public const float DebridementMaxDamageFractionOfHealth = 0.40f;
         
         // 野战生理盐水冲洗瞬间降低的污染度
         public const float SalineContaminationReduction = 0.40f;
@@ -372,6 +376,11 @@ namespace EmergencyExpanded
         public const float AntibioticSeveritySlowdownMultiplier = 0.30f;
         // 抗生素期间，免疫力生成速度的额外倍率加成 (例如 1.2f 表示 120% 速度)
         public const float AntibioticImmunityBoostMultiplier = 1.25f;
+
+        // 处于站立移动状态的小人，其下肢暴露伤口踩踏泥沼/血迹时吸收环境污染的相对系数
+        public const float ContaminationWalkingExtremityFactor = 0.60f;
+        // 核心脏器（头部、躯干等）完全坏死时转化为 SIRS 全身炎症负荷的系数 (避免瞬间斩首暴毙)
+        public const float NecrosisVitalOrganSirsLoad = 35.0f;
 
         // ================= 烧伤与感染联动分级机制 (Burn & Infection Interaction) =================
         // II度烧伤的判定阈值 (累计伤害量)

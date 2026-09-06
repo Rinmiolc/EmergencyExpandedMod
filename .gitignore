@@ -1,8 +1,12 @@
 .vs/
 bin/
 obj/
+.agents/
+.claude/
 *.csproj.user
 *.suo
 *.user
 *.sln.docstates
 *.bat
+GEMINI.md
+CLAUDE.md

@@ -60,6 +60,11 @@ namespace EmergencyExpanded
         // 感染机制新增 Def
         public static HediffDef EE_Necrosis;
         public static HediffDef EE_Sepsis;
+        public static HediffDef EE_BroadAntibioticsHigh;
+        public static ThingDef EE_Saline;
+        public static ThingDef EE_BroadAntibiotics;
+        public static RecipeDef EE_Recipe_Debridement;
+        public static RecipeDef EE_Recipe_Irrigation;
 
         public static ThingDef EE_FractureRing;
         public static ThingDef EE_PlasterBandage;

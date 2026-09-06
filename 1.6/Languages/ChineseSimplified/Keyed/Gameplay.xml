@@ -37,6 +37,7 @@
   <EE_MessageCastingSuccess>[EE] 石膏固定成功：{0} 为 {1} 的 {2} 实施了石膏包扎，对齐质量 {3}！</EE_MessageCastingSuccess>
   <EE_MessageDebridementAccidentalAmputation>由于{0}的清创手法过于粗暴，不慎将{1}的{2}完全切除！</EE_MessageDebridementAccidentalAmputation>
   <EE_MessageDebridementSuccess>{0}成功为{1}执行了清创术，去除了污染和坏死组织。本次清创造成了 {2} 点切割伤害。</EE_MessageDebridementSuccess>
+  <EE_MessageGangreneAmputation>{0} 的 {1} 发生严重坏疽，坏死组织已自然脱落截断！</EE_MessageGangreneAmputation>
   <EE_MessageFractureHealedPerfect>{0} 的 {1} 骨骼愈合完毕，复位对齐良好，肢体功能已完全恢复！</EE_MessageFractureHealedPerfect>
   <EE_MessageHeartAttackVFWorsened>{0}的心脏病极度恶化，已经转化为致命的室颤（心室蠕动）！</EE_MessageHeartAttackVFWorsened>
   <EE_MessageIrrigationSuccess>{0}成功为{1}执行了伤口冲洗，除去了污垢和可能滋生细菌的杂质。</EE_MessageIrrigationSuccess>

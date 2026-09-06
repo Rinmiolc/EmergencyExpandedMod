@@ -10,7 +10,7 @@
     <jobString>Performing surgical debridement.</jobString>
     <workAmount>1800</workAmount>
     <surgerySuccessChanceFactor>0.95</surgerySuccessChanceFactor>
-    <deathOnFailedSurgeryChance>0.02</deathOnFailedSurgeryChance>
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
     <skillRequirements>
       <Medicine>6</Medicine>
     </skillRequirements>
@@ -40,9 +40,6 @@
         <li>EE_Saline</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
   <!-- 伤口冲洗术 (Wound Irrigation) -->
   <RecipeDef ParentName="SurgeryFlesh">
@@ -72,9 +69,6 @@
         <li>EE_Saline</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
 
 </Defs>

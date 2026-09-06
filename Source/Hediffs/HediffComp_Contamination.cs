@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 using UnityEngine;
 using System.Text;
@@ -92,58 +92,79 @@ namespace EmergencyExpanded
 
         private void UpdateContaminationFromEnvironment()
         {
-            // 如果伤口已经被治愈（清创），污染度不再增加
-            if (this.contamination <= 0f) return;
+            // 如果伤口是永久性陈旧伤疤，不再受环境污染
+            if (this.parent.IsPermanent()) return;
 
             float environmentFactor = 0f;
 
-            // 倒地状态，直接接触地面
-            if (Pawn.Downed && Pawn.Spawned)
+            if (Pawn.Spawned && Pawn.Map != null)
             {
-                TerrainDef terrain = Pawn.Position.GetTerrain(Pawn.Map);
-                if (terrain != null)
+                // 1. 室内综合清洁度计算 (优先使用房间环境，比单纯看地板贴图更符合 RimWorld 机制)
+                Room room = Pawn.GetRoom();
+                if (room != null && !room.PsychologicallyOutdoors)
                 {
-                    // 肮脏的地形（泥地、沼泽等）
-                    if (terrain.defName.Contains("Mud") || terrain.defName.Contains("Water") || terrain.defName.Contains("Swamp"))
+                    float roomCleanliness = room.GetStat(RoomStatDefOf.Cleanliness);
+                    if (roomCleanliness < 0)
                     {
-                        environmentFactor += EE_Constants.ContaminationMudFactor; // 每秒增加 0.05%，一天(1000秒)增加 50%
+                        environmentFactor += EE_Constants.ContaminationCleanlinessFactor * Mathf.Abs(roomCleanliness);
                     }
-                    // 地板清洁度影响
-                    else
+                }
+                else
+                {
+                    // 室外：计算地表天然清洁度
+                    TerrainDef terrain = Pawn.Position.GetTerrain(Pawn.Map);
+                    if (terrain != null)
                     {
-                        float cleanliness = terrain.GetStatValueAbstract(StatDefOf.Cleanliness);
-                        if (cleanliness < 0)
+                        float terrainCleanliness = terrain.GetStatValueAbstract(StatDefOf.Cleanliness);
+                        if (terrainCleanliness < 0)
                         {
-                            environmentFactor += EE_Constants.ContaminationCleanlinessFactor * Mathf.Abs(cleanliness);
+                            environmentFactor += EE_Constants.ContaminationCleanlinessFactor * Mathf.Abs(terrainCleanliness);
                         }
                     }
                 }
 
-                // 地面上是否有血迹、呕吐物等污垢
-                var thingList = Pawn.Position.GetThingList(Pawn.Map);
-                bool hasFilth = false;
-                for (int i = 0; i < thingList.Count; i++)
+                // 2. 地面直接接触判定 (倒地小人全身接触；站立小人的下肢伤口踩踏接触)
+                bool isLowerExtremity = this.parent.Part != null && (
+                    this.parent.Part.def.defName.IndexOf("leg", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    this.parent.Part.def.defName.IndexOf("foot", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    this.parent.Part.def.defName.IndexOf("toe", System.StringComparison.OrdinalIgnoreCase) >= 0);
+
+                if (Pawn.Downed || isLowerExtremity)
                 {
-                    if (thingList[i].def.category == ThingCategory.Filth)
+                    TerrainDef terrain = Pawn.Position.GetTerrain(Pawn.Map);
+                    float directContactMultiplier = Pawn.Downed ? 1.0f : EE_Constants.ContaminationWalkingExtremityFactor;
+
+                    if (terrain != null && (terrain.defName.Contains("Mud") || terrain.defName.Contains("Water") || terrain.defName.Contains("Swamp")))
                     {
-                        hasFilth = true;
-                        break;
+                        environmentFactor += EE_Constants.ContaminationMudFactor * directContactMultiplier;
+                    }
+
+                    // 地面上是否有血迹、呕吐物等污垢
+                    var thingList = Pawn.Position.GetThingList(Pawn.Map);
+                    bool hasFilth = false;
+                    for (int i = 0; i < thingList.Count; i++)
+                    {
+                        if (thingList[i].def != null && thingList[i].def.category == ThingCategory.Filth)
+                        {
+                            hasFilth = true;
+                            break;
+                        }
+                    }
+
+                    if (hasFilth)
+                    {
+                        environmentFactor += EE_Constants.ContaminationFilthFactor * directContactMultiplier;
                     }
                 }
-
-                if (hasFilth)
-                {
-                    environmentFactor += EE_Constants.ContaminationFilthFactor;
-                }
             }
 
-            // 伤口未包扎时，自然污染微量上升
+            // 3. 伤口未包扎时，自然污染微量上升 (细菌繁殖)
             if (!this.parent.IsTended())
             {
-                environmentFactor += EE_Constants.ContaminationUntendedFactor; // 降低自然恶化速度
+                environmentFactor += EE_Constants.ContaminationUntendedFactor;
             }
 
-            // 针对烧伤的特殊环境污染乘数（皮肤屏障丧失）
+            // 4. 针对烧伤的特殊环境污染乘数（皮肤屏障丧失，极易受环境细菌侵蚀）
             HediffComp_Burn burnComp = this.parent.TryGetComp<HediffComp_Burn>();
             if (burnComp != null)
             {
@@ -157,6 +178,15 @@ namespace EmergencyExpanded
             {
                 this.contamination = Mathf.Clamp01(this.contamination + environmentFactor);
             }
+            else if (this.parent.IsTended() && this.contamination > 0f)
+            {
+                // 包扎良好且环境洁净时，体内白细胞 (血液过滤) 缓慢清除微量杂菌
+                float filtration = Pawn.health.capacities.GetLevel(PawnCapacityDefOf.BloodFiltration);
+                if (filtration > 0.6f)
+                {
+                    this.contamination = Mathf.Clamp01(this.contamination - (0.001f * filtration));
+                }
+            }
         }
 
         private void CheckInfectionProgression()
@@ -167,9 +197,12 @@ namespace EmergencyExpanded
             {
                 if (localInf == null)
                 {
-                    // 判断应该引发哪种局部感染（钝性挫伤引发坏死，其余开放伤引发原版感染）
-                    bool isBlunt = this.parent.def.defName.Contains("Bruise") || this.parent.def.defName.Contains("Crush") || this.parent.def.defName.Contains("Blunt");
-                    HediffDef targetLocalInfection = isBlunt ? EE_DefOf.EE_Necrosis : HediffDefOf.WoundInfection;
+                    // 判断应该引发哪种局部感染：
+                    // 仅重度压砸伤 (Crush 伤害>=10) 或开放性骨折或超极度污染 (>=0.8) 引发深部坏死，其余开放创伤引发蜂窝织炎/原版感染
+                    bool isSevereNecrotic = (this.parent.def.defName.Contains("Crush") && this.parent.Severity >= 10f) ||
+                                            (EE_DefOf.EE_OpenFracture != null && this.parent.def == EE_DefOf.EE_OpenFracture) ||
+                                            this.contamination >= 0.80f;
+                    HediffDef targetLocalInfection = isSevereNecrotic ? EE_DefOf.EE_Necrosis : HediffDefOf.WoundInfection;
 
                     Pawn.health.AddHediff(targetLocalInfection, this.parent.Part);
                     localInf = Pawn.health.hediffSet.hediffs.Find(h => h.def == targetLocalInfection && h.Part == this.parent.Part);
@@ -180,8 +213,27 @@ namespace EmergencyExpanded
                 }
             }
 
-            // 如果已经有局部感染，基于污染度动态增加严重度
-            if (localInf != null && this.contamination > 0f)
+            // 多伤口聚合保护：如果同一部位存在多个伤口，只由该部位污染度最高的主伤口驱动感染严重度恶化，防止数值指数级叠加爆炸
+            bool isPrimaryWoundOnPart = true;
+            if (this.parent.Part != null)
+            {
+                var hediffs = Pawn.health.hediffSet.hediffs;
+                for (int i = 0; i < hediffs.Count; i++)
+                {
+                    if (hediffs[i] != this.parent && hediffs[i].Part == this.parent.Part && hediffs[i] is Hediff_Injury otherInjury)
+                    {
+                        var otherComp = otherInjury.TryGetComp<HediffComp_Contamination>();
+                        if (otherComp != null && otherComp.contamination > this.contamination)
+                        {
+                            isPrimaryWoundOnPart = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 如果已经有局部感染，基于最高污染创面动态增加严重度
+            if (isPrimaryWoundOnPart && localInf != null && this.contamination > 0f)
             {
                 float extraSeverity = this.contamination * EE_Constants.InfectionDynamicSeverityBase;
                 
@@ -196,7 +248,7 @@ namespace EmergencyExpanded
                 localInf.Severity += extraSeverity;
                 
                 // 动态渗出：如果局部感染达到化脓期(>=0.66) 或 坏死期，概率性在地面生成污垢
-                if (localInf.Severity >= 0.66f && Pawn.Spawned)
+                if (localInf.Severity >= 0.66f && Pawn.Spawned && Pawn.Map != null)
                 {
                     if (Rand.Chance(0.2f)) // 每次检查有 20% 概率生成化脓污垢
                     {
@@ -228,7 +280,7 @@ namespace EmergencyExpanded
             if (triggerSepsis)
             {
                 // 触发全身败血症
-                if (!Pawn.health.hediffSet.HasHediff(EE_DefOf.EE_Sepsis))
+                if (EE_DefOf.EE_Sepsis != null && !Pawn.health.hediffSet.HasHediff(EE_DefOf.EE_Sepsis))
                 {
                     Pawn.health.AddHediff(EE_DefOf.EE_Sepsis);
                     if (Pawn.Spawned)

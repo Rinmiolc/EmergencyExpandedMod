@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using Verse;
@@ -9,10 +9,11 @@ namespace EmergencyExpanded
     {
         public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
         {
-            // 找出所有有污染度伤口或者坏死的部位
+            // 找出所有有污染度伤口、坏死或者局部活动性化脓感染的部位
             foreach (var part in pawn.RaceProps.body.AllParts)
             {
                 if (pawn.health.hediffSet.HasHediff(EE_DefOf.EE_Necrosis, part) || 
+                    pawn.health.hediffSet.HasHediff(HediffDefOf.WoundInfection, part) ||
                     pawn.health.hediffSet.hediffs.Any(h => h.Part == part && h is Hediff_Injury && h.TryGetComp<HediffComp_Contamination>()?.contamination > 0f))
                 {
                     yield return part;
@@ -41,7 +42,22 @@ namespace EmergencyExpanded
                 didAnything = true;
             }
 
-            // 2. 清除污染并造成切削伤害 (医术越差，伤害越高，甚至可能导致小器官截肢)
+            // 2. 治疗并削减局部化脓感染 (WoundInfection)
+            Hediff woundInf = pawn.health.hediffSet.hediffs.FirstOrDefault(h => h.def == HediffDefOf.WoundInfection && h.Part == part);
+            if (woundInf != null)
+            {
+                if (woundInf.Severity <= 0.35f)
+                {
+                    pawn.health.RemoveHediff(woundInf);
+                }
+                else
+                {
+                    woundInf.Severity = UnityEngine.Mathf.Max(0.1f, woundInf.Severity * (1f - EE_Constants.DebridementInfectionSeverityReduction));
+                }
+                didAnything = true;
+            }
+
+            // 3. 清除所有开放创面的污染度
             float medSkill = billDoer?.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
             float damageAmount = UnityEngine.Mathf.Max(EE_Constants.DebridementDamageMin, EE_Constants.DebridementDamageBase - (medSkill * EE_Constants.DebridementDamageSkillReduction));
             bool partDestroyed = false;
@@ -57,15 +73,24 @@ namespace EmergencyExpanded
                 }
             }
 
+            // 4. 切除腐肉伤害 (进行安全边界约束，防止误切重要器官或当场致死)
             if (didAnything)
             {
                 float partHealthBefore = pawn.health.hediffSet.GetPartHealth(part);
-                DamageInfo dinfo = new DamageInfo(DamageDefOf.Cut, damageAmount, 0f, -1f, billDoer, part, null, DamageInfo.SourceCategory.ThingOrUnknown, null, true, true);
-                pawn.TakeDamage(dinfo);
-                
-                if (pawn.health.hediffSet.GetPartHealth(part) <= 0f && partHealthBefore > 0f)
+                if (partHealthBefore > 0f)
                 {
-                    partDestroyed = true;
+                    bool isVital = Hediff_Necrosis.IsVitalCorePart(part);
+                    float maxSafeFraction = isVital ? 0.25f : EE_Constants.DebridementMaxDamageFractionOfHealth;
+                    float maxAllowedDamage = UnityEngine.Mathf.Max(1f, partHealthBefore * maxSafeFraction);
+                    damageAmount = UnityEngine.Mathf.Min(damageAmount, maxAllowedDamage);
+
+                    DamageInfo dinfo = new DamageInfo(DamageDefOf.Cut, damageAmount, 0f, -1f, billDoer, part, null, DamageInfo.SourceCategory.ThingOrUnknown, null, true, true);
+                    pawn.TakeDamage(dinfo);
+                    
+                    if (pawn.health.hediffSet.GetPartHealth(part) <= 0f && partHealthBefore > 0f)
+                    {
+                        partDestroyed = true;
+                    }
                 }
             }
 

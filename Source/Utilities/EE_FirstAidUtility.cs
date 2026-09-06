@@ -116,6 +116,22 @@ namespace EmergencyExpanded
                     return false;
 
                 case EmergencyItemType.IngestibleDirect:
+                    // Broad-spectrum antibiotics: treat active severe infection, suppuration or sepsis
+                    if (itemDef == EE_DefOf.EE_BroadAntibiotics || itemDef.defName == "EE_BroadAntibiotics")
+                    {
+                        if (EE_DefOf.EE_BroadAntibioticsHigh != null && patient.health.hediffSet.HasHediff(EE_DefOf.EE_BroadAntibioticsHigh))
+                        {
+                            return false; // 已有抗生素药效，不重复推注
+                        }
+                        if ((EE_DefOf.EE_Sepsis != null && patient.health.hediffSet.HasHediff(EE_DefOf.EE_Sepsis)) ||
+                            (EE_DefOf.EE_Necrosis != null && patient.health.hediffSet.HasHediff(EE_DefOf.EE_Necrosis)) ||
+                            patient.health.hediffSet.hediffs.Any(h => h.def == HediffDefOf.WoundInfection && h.Severity >= 0.33f))
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+
                     // Hemogen pack: reduce blood loss
                     if (itemDef.defName == "HemogenPack")
                     {

@@ -37,6 +37,7 @@
   <EE_MessageCastingSuccess>[EE] Plaster casting successful: {0} casted {1}'s {2} with an alignment quality of {3}!</EE_MessageCastingSuccess>
   <EE_MessageDebridementAccidentalAmputation>Due to {0}'s clumsy debridement technique, {1}'s {2} was accidentally amputated completely!</EE_MessageDebridementAccidentalAmputation>
   <EE_MessageDebridementSuccess>{0} successfully performed debridement on {1}, clearing contamination and necrotic tissue. This caused {2} points of cut damage.</EE_MessageDebridementSuccess>
+  <EE_MessageGangreneAmputation>{0}'s {1} suffered from severe gangrene and has sloughed off!</EE_MessageGangreneAmputation>
   <EE_MessageFractureHealedPerfect>{0}'s {1} bone has fully healed with good alignment. Limb function is completely restored!</EE_MessageFractureHealedPerfect>
   <EE_MessageHeartAttackVFWorsened>{0}'s cardiac condition has severely worsened, deteriorating into fatal ventricular fibrillation!</EE_MessageHeartAttackVFWorsened>
   <EE_MessageIrrigationSuccess>{0} successfully performed wound irrigation on {1}, clearing filth and potential bacterial hazards.</EE_MessageIrrigationSuccess>
