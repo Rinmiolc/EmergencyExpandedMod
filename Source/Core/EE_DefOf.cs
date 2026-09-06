@@ -15,6 +15,7 @@ namespace EmergencyExpanded
         public static HediffDef EE_MyocardialInfarction;
         public static HediffDef AdrenalineBoost;
         public static HediffDef AdrenalineCrash;
+        public static ThingDef EE_AdrenalineSyringe;
         
         // 动态心率状态指示 Hediffs
         public static HediffDef EE_Tachycardia;
@@ -68,6 +69,9 @@ namespace EmergencyExpanded
 
         public static ThingDef EE_FractureRing;
         public static ThingDef EE_PlasterBandage;
+        public static ThingDef EE_Tourniquet;
+        public static ThingDef EE_FirstAidKit;
+        public static ThingDef EE_FirstAidBox;
 
         public static RecipeDef EE_Recipe_TraditionalBoneSetting;
         public static RecipeDef EE_Recipe_PlasterCasting;

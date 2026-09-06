@@ -11,9 +11,6 @@
     <hideBodyPartNames>false</hideBodyPartNames>
     <isViolation>false</isViolation>
     <targetsBodyPart>true</targetsBodyPart>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
     <ingredients>
       <li>
         <filter>

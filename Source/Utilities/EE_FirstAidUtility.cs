@@ -25,11 +25,11 @@ namespace EmergencyExpanded
             if (def == null) return EmergencyItemType.None;
 
             // 1. Custom emergency items
-            if (def.defName == "EE_Tourniquet") return EmergencyItemType.Tourniquet;
-            if (def.defName == "EE_FractureRing") return EmergencyItemType.Splint;
-            if (def.defName == "EE_FirstAidKit" || def.defName == "EE_FirstAidBox") return EmergencyItemType.FirstAidKit;
-            if (def.defName == "EE_Defibrillator") return EmergencyItemType.Defibrillator;
-            if (def.defName == "EE_Saline") return EmergencyItemType.Irrigation;
+            if (def == EE_DefOf.EE_Tourniquet || def.defName == "EE_Tourniquet") return EmergencyItemType.Tourniquet;
+            if (def == EE_DefOf.EE_FractureRing || def.defName == "EE_FractureRing") return EmergencyItemType.Splint;
+            if (def == EE_DefOf.EE_FirstAidKit || def == EE_DefOf.EE_FirstAidBox || def.defName == "EE_FirstAidKit" || def.defName == "EE_FirstAidBox") return EmergencyItemType.FirstAidKit;
+            if (def == EE_DefOf.EE_Defibrillator || def.defName == "EE_Defibrillator") return EmergencyItemType.Defibrillator;
+            if (def == EE_DefOf.EE_Saline || def.defName == "EE_Saline") return EmergencyItemType.Irrigation;
 
             // 2. Vanilla & modded medicines
             if (def.IsMedicine) return EmergencyItemType.Medicine;

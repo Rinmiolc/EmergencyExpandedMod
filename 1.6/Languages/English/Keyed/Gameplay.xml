@@ -16,6 +16,7 @@
   <EE_ConfirmDeclareDeathDesc>Are you sure you want to declare {0} dead? This will immediately terminate their life.</EE_ConfirmDeclareDeathDesc>
   <EE_ContaminationDegree>Contamination: {0}%</EE_ContaminationDegree>
   <EE_Doctor>doctor</EE_Doctor>
+  <EE_Someone>someone</EE_Someone>
   <EE_FractureCastedTag>&lt;color=#40E0D0&gt;[Casted]&lt;/color&gt;</EE_FractureCastedTag>
   <EE_FractureInternallyFixedTag>&lt;color=#00FFFF&gt;[ORIF Fixed]&lt;/color&gt;</EE_FractureInternallyFixedTag>
   <EE_FractureSplintedTag>&lt;color=#DA70D6&gt;[Splinted]&lt;/color&gt;</EE_FractureSplintedTag>

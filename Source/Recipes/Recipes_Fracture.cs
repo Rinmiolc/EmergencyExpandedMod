@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using Verse;
@@ -27,6 +27,15 @@ namespace EmergencyExpanded
 
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
+            if (billDoer != null)
+            {
+                if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+                {
+                    return;
+                }
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+            }
+
             Hediff_Fracture fracture = pawn.health.hediffSet.hediffs
                 .OfType<Hediff_Fracture>()
                 .FirstOrDefault(h => h.Part == part);
@@ -38,7 +47,7 @@ namespace EmergencyExpanded
                 fracture.isCasted = false;
                 fracture.isInternallyFixed = false;
 
-                float docSkill = billDoer.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
+                float docSkill = billDoer?.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
                 float alignment = docSkill * 0.035f + Rand.Range(-0.08f, 0.08f);
                 if (EE_DefOf.EE_MorphineActive != null && pawn.health.hediffSet.HasHediff(EE_DefOf.EE_MorphineActive))
                 {
@@ -50,7 +59,8 @@ namespace EmergencyExpanded
                 fracture.Tended(0.50f, 1.0f);
                 pawn.Drawer?.renderer?.SetAllGraphicsDirty();
 
-                Messages.Message("EE_MessageTraditionalSettingSuccess".Translate(billDoer.LabelShort, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
+                string doctorName = billDoer?.LabelShort ?? "EE_Someone".Translate();
+                Messages.Message("EE_MessageTraditionalSettingSuccess".Translate(doctorName, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
             }
         }
     }
@@ -74,6 +84,15 @@ namespace EmergencyExpanded
 
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
+            if (billDoer != null)
+            {
+                if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+                {
+                    return;
+                }
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+            }
+
             Hediff_Fracture fracture = pawn.health.hediffSet.hediffs
                 .OfType<Hediff_Fracture>()
                 .FirstOrDefault(h => h.Part == part && h.def == EE_DefOf.EE_ClosedFracture);
@@ -85,7 +104,7 @@ namespace EmergencyExpanded
                 fracture.isStrictBedrest = false;
                 fracture.isInternallyFixed = false;
 
-                float docSkill = billDoer.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
+                float docSkill = billDoer?.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
                 float alignment = 0.50f + docSkill * 0.022f + Rand.Range(-0.05f, 0.05f);
                 if (EE_DefOf.EE_MorphineActive != null && pawn.health.hediffSet.HasHediff(EE_DefOf.EE_MorphineActive))
                 {
@@ -97,7 +116,8 @@ namespace EmergencyExpanded
                 fracture.Tended(0.85f, 1.0f);
                 pawn.Drawer?.renderer?.SetAllGraphicsDirty();
 
-                Messages.Message("EE_MessageCastingSuccess".Translate(billDoer.LabelShort, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
+                string doctorName = billDoer?.LabelShort ?? "EE_Someone".Translate();
+                Messages.Message("EE_MessageCastingSuccess".Translate(doctorName, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
             }
         }
     }
@@ -118,6 +138,15 @@ namespace EmergencyExpanded
 
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
+            if (billDoer != null)
+            {
+                if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+                {
+                    return;
+                }
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+            }
+
             Hediff_Fracture fracture = pawn.health.hediffSet.hediffs
                 .OfType<Hediff_Fracture>()
                 .FirstOrDefault(h => h.Part == part);
@@ -129,7 +158,7 @@ namespace EmergencyExpanded
                 fracture.isCasted = false;
                 fracture.isStrictBedrest = false;
 
-                float docSkill = billDoer.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
+                float docSkill = billDoer?.skills?.GetSkill(SkillDefOf.Medicine)?.Level ?? 5f;
                 float alignment = 0.75f + docSkill * 0.013f + Rand.Range(-0.03f, 0.03f);
                 if (EE_DefOf.EE_MorphineActive != null && pawn.health.hediffSet.HasHediff(EE_DefOf.EE_MorphineActive))
                 {
@@ -141,7 +170,8 @@ namespace EmergencyExpanded
                 fracture.Tended(1.0f, 1.0f);
                 pawn.Drawer?.renderer?.SetAllGraphicsDirty();
 
-                Messages.Message("EE_MessageOrifSuccess".Translate(billDoer.LabelShort, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
+                string doctorName = billDoer?.LabelShort ?? "EE_Someone".Translate();
+                Messages.Message("EE_MessageOrifSuccess".Translate(doctorName, pawn.LabelShort, part.Label, fracture.alignmentQuality.ToStringPercent()), pawn, MessageTypeDefOf.PositiveEvent);
             }
         }
     }
@@ -162,6 +192,15 @@ namespace EmergencyExpanded
 
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
+            if (billDoer != null)
+            {
+                if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+                {
+                    return;
+                }
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+            }
+
             Hediff malunion = pawn.health.hediffSet.hediffs
                 .FirstOrDefault(h => h.def == EE_DefOf.EE_Malunion && h.Part == part);
 
@@ -181,7 +220,8 @@ namespace EmergencyExpanded
                     }
                 }
 
-                Find.LetterStack.ReceiveLetter("EE_LetterOsteotomySuccess_Label".Translate(), "EE_LetterOsteotomySuccess_Desc".Translate(billDoer.LabelShort, pawn.LabelShort, part.Label), LetterDefOf.PositiveEvent, pawn);
+                string doctorName = billDoer?.LabelShort ?? "EE_Someone".Translate();
+                Find.LetterStack.ReceiveLetter("EE_LetterOsteotomySuccess_Label".Translate(), "EE_LetterOsteotomySuccess_Desc".Translate(doctorName, pawn.LabelShort, part.Label), LetterDefOf.PositiveEvent, pawn);
             }
         }
     }

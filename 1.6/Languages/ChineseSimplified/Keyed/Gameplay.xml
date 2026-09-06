@@ -16,6 +16,7 @@
   <EE_ConfirmDeclareDeathDesc>你确定要对 {0} 宣布死亡吗？这将会直接终结该小人的生命。</EE_ConfirmDeclareDeathDesc>
   <EE_ContaminationDegree>污染度: {0}%</EE_ContaminationDegree>
   <EE_Doctor>医生</EE_Doctor>
+  <EE_Someone>某人</EE_Someone>
   <EE_FractureCastedTag>&lt;color=#40E0D0&gt;[石膏固定]&lt;/color&gt;</EE_FractureCastedTag>
   <EE_FractureInternallyFixedTag>&lt;color=#00FFFF&gt;[钢板内固定]&lt;/color&gt;</EE_FractureInternallyFixedTag>
   <EE_FractureSplintedTag>&lt;color=#DA70D6&gt;[骨折环固定]&lt;/color&gt;</EE_FractureSplintedTag>

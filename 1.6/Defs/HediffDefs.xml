@@ -57,15 +57,6 @@
         <capMods>
           <li><capacity>Consciousness</capacity><setMax>0.5</setMax></li>
         </capMods>
-        <hediffGivers>
-          <li Class="HediffGiver_Random">
-            <hediff>EE_MyocardialInfarction</hediff>
-            <mtbDays>0.03</mtbDays> 
-            <partsToAffect>
-              <li>Heart</li>
-            </partsToAffect>
-          </li>
-        </hediffGivers>
       </li>
       <li>
         <minSeverity>0.95</minSeverity>
@@ -75,15 +66,6 @@
         <capMods>
           <li><capacity>Consciousness</capacity><setMax>0.3</setMax></li>
         </capMods>
-        <hediffGivers>
-          <li Class="HediffGiver_Random">
-            <hediff>EE_MyocardialInfarction</hediff>
-            <mtbDays>0.1</mtbDays> 
-            <partsToAffect>
-              <li>Heart</li>
-            </partsToAffect>
-          </li>
-        </hediffGivers>
       </li>
     </stages>
   </HediffDef>

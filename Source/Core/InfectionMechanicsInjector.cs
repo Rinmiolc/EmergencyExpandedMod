@@ -71,7 +71,7 @@ namespace EmergencyExpanded
             {
                 if (def.race != null && def.race.IsFlesh)
                 {
-                    // 为所有血肉生物注入清创术和冲洗术，提供对异种族 (HAR) 和动物的防御性兼容
+                    // 为所有血肉生物注入清创术、冲洗术、胸腔穿刺减压与基础正骨/石膏术，提供对异种族 (HAR) 和动物的防御性兼容
                     if (def.recipes == null)
                     {
                         def.recipes = new List<RecipeDef>();
@@ -83,6 +83,31 @@ namespace EmergencyExpanded
                     if (EE_DefOf.EE_Recipe_Irrigation != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_Irrigation))
                     {
                         def.recipes.Add(EE_DefOf.EE_Recipe_Irrigation);
+                    }
+                    if (EE_DefOf.EE_Recipe_NeedleDecompression != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_NeedleDecompression))
+                    {
+                        def.recipes.Add(EE_DefOf.EE_Recipe_NeedleDecompression);
+                    }
+                    if (EE_DefOf.EE_Recipe_TraditionalBoneSetting != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_TraditionalBoneSetting))
+                    {
+                        def.recipes.Add(EE_DefOf.EE_Recipe_TraditionalBoneSetting);
+                    }
+                    if (EE_DefOf.EE_Recipe_PlasterCasting != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_PlasterCasting))
+                    {
+                        def.recipes.Add(EE_DefOf.EE_Recipe_PlasterCasting);
+                    }
+
+                    // 对于类人生物 (Humanlike，包括 HAR 异种族)，注入高级骨科手术 (ORIF 钢板内固定与截骨重折术)
+                    if (def.race.Humanlike)
+                    {
+                        if (EE_DefOf.EE_Recipe_ORIF != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_ORIF))
+                        {
+                            def.recipes.Add(EE_DefOf.EE_Recipe_ORIF);
+                        }
+                        if (EE_DefOf.EE_Recipe_Osteotomy != null && !def.recipes.Contains(EE_DefOf.EE_Recipe_Osteotomy))
+                        {
+                            def.recipes.Add(EE_DefOf.EE_Recipe_Osteotomy);
+                        }
                     }
 
                     // 1. 处理 inspectorTabs 类型列表

@@ -10,7 +10,7 @@
     <jobString>Performing traditional bone setting.</jobString>
     <workAmount>1500</workAmount>
     <surgerySuccessChanceFactor>1.00</surgerySuccessChanceFactor>
-    <deathOnFailedSurgeryChance>0.01</deathOnFailedSurgeryChance>
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
     <skillRequirements>
       <Medicine>4</Medicine>
     </skillRequirements>
@@ -42,9 +42,6 @@
         <li>WoodLog</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
 
   <!-- 医用石膏固定术 (Plaster Casting) -->
@@ -56,7 +53,7 @@
     <jobString>Applying plaster cast.</jobString>
     <workAmount>1200</workAmount>
     <surgerySuccessChanceFactor>1.00</surgerySuccessChanceFactor>
-    <deathOnFailedSurgeryChance>0.01</deathOnFailedSurgeryChance>
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
     <skillRequirements>
       <Medicine>6</Medicine>
     </skillRequirements>
@@ -88,9 +85,6 @@
         <li>EE_PlasterBandage</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
 
   <!-- 切开复位内固定术 (ORIF Surgery) -->
@@ -102,7 +96,7 @@
     <jobString>Performing ORIF surgery.</jobString>
     <workAmount>3000</workAmount>
     <surgerySuccessChanceFactor>0.95</surgerySuccessChanceFactor>
-    <deathOnFailedSurgeryChance>0.05</deathOnFailedSurgeryChance>
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
     <skillRequirements>
       <Medicine>8</Medicine>
     </skillRequirements>
@@ -132,9 +126,6 @@
         <li>ComponentIndustrial</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
 
   <!-- 畸形接骨重折术 (Osteotomy) -->
@@ -146,7 +137,7 @@
     <jobString>Performing osteotomy.</jobString>
     <workAmount>3500</workAmount>
     <surgerySuccessChanceFactor>0.90</surgerySuccessChanceFactor>
-    <deathOnFailedSurgeryChance>0.08</deathOnFailedSurgeryChance>
+    <deathOnFailedSurgeryChance>0</deathOnFailedSurgeryChance>
     <skillRequirements>
       <Medicine>10</Medicine>
     </skillRequirements>
@@ -167,9 +158,6 @@
         <li>MedicineUltratech</li>
       </thingDefs>
     </fixedIngredientFilter>
-    <recipeUsers>
-      <li>Human</li>
-    </recipeUsers>
   </RecipeDef>
 
 </Defs>
